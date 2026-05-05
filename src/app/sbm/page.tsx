@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Clock3, FolderOpen, Link2, TrendingUp } from 'lucide-react'
+import { Clock3, FolderOpen, Link2, TrendingUp, Share2, Check } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { buildTaskMetadata } from '@/lib/seo'
 import { taskPageMetadata } from '@/config/site.content'
 import { fetchTaskPosts } from '@/lib/task-data'
+import { CopyLinkButton } from '@/components/sbm/copy-link-button'
 
 export const revalidate = 3
 
@@ -109,7 +110,6 @@ export default async function SocialBookmarkingPage({ searchParams }: { searchPa
               <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-wide text-[#777]">
                 <span className="inline-flex items-center gap-1"><TrendingUp className="h-3.5 w-3.5" /> Resource #{index + 1}</span>
                 <span className="inline-flex items-center gap-1"><FolderOpen className="h-3.5 w-3.5" /> {(post.content as Record<string, unknown> | undefined)?.category || 'General'}</span>
-                <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> {formatDate(post.publishedAt || post.createdAt)}</span>
               </div>
               <h3 className="mt-3 text-2xl font-extrabold leading-tight text-[#1f1f1f]">{post.title}</h3>
               <p className="mt-3 text-sm leading-7 text-[#4a4a4a]">{post.summary || 'Open this bookmark for a clear breakdown and quick access to the original source.'}</p>
@@ -117,7 +117,10 @@ export default async function SocialBookmarkingPage({ searchParams }: { searchPa
                 <Link href={`/sbm/${post.slug}`} className="inline-flex rounded-none bg-[#2f2f32] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1f1f22]">
                   Open Bookmark
                 </Link>
-                <span className="inline-flex items-center gap-1 text-sm text-[#6c6c6c]"><Link2 className="h-4 w-4" /> curated link</span>
+                <CopyLinkButton 
+                  url={`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/sbm/${post.slug}`}
+                  className="rounded-none border border-[#d3d3d3] bg-white text-[#4f4f4f] hover:bg-[#f5f5f5]"
+                />
               </div>
             </article>
           ))}

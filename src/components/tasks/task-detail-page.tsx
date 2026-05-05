@@ -19,12 +19,15 @@ import { getFactoryState } from "@/design/factory/get-factory-state";
 import { getProductKind } from "@/design/factory/get-product-kind";
 import { DirectoryTaskDetailPage } from "@/design/products/directory/task-detail-page";
 import { TASK_DETAIL_PAGE_OVERRIDE_ENABLED, TaskDetailPageOverride } from "@/overrides/task-detail-page";
+import { SbmDetailPage } from "@/components/sbm/sbm-detail-page";
+import { defaultAuthorProfile } from "@/config/site.identity";
 
 type PostContent = {
   category?: string;
   location?: string;
   address?: string;
   website?: string;
+  url?: string;
   phone?: string;
   email?: string;
   description?: string;
@@ -126,6 +129,56 @@ const buildMapEmbedUrl = (
 export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: string }) {
   if (TASK_DETAIL_PAGE_OVERRIDE_ENABLED) {
     return await TaskDetailPageOverride({ task, slug });
+  }
+
+  // Use enhanced SBM detail page for SBM task
+  if (task === "sbm") {
+    let post: SitePost | null = null;
+    try {
+      post = await fetchTaskPostBySlug(task, slug);
+    } catch (error) {
+      console.warn("Failed to load SBM post detail", error);
+    }
+
+    if (!post) {
+      notFound();
+    }
+
+    // Get URL from content if available
+    const content = getContent(post);
+    const postUrl = content.website || content.url || post.summary?.match(/https?:\/\/[^\s]+/)?.[0] || "#";
+    
+    // Convert SitePost to BookmarkType format for SbmDetailPage
+    const bookmark = {
+      id: post.id,
+      title: post.title,
+      description: post.summary || "",
+      url: postUrl,
+      image: post.media?.[0]?.url || "/placeholder.svg",
+      category: post.tags?.[0] || "General",
+      domain: postUrl !== "#" ? new URL(postUrl).hostname : "",
+      tags: post.tags || [],
+      author: {
+        id: "default",
+        name: post.authorName || defaultAuthorProfile.name,
+        email: "user@example.com",
+        avatar: defaultAuthorProfile.avatar,
+        bio: "",
+        joinedDate: new Date().toISOString(),
+        followers: 0,
+        following: 0,
+        isVerified: false,
+      },
+      createdAt: post.publishedAt || new Date().toISOString(),
+      slug: post.slug,
+      upvotes: 0,
+      saves: 0,
+      commentsCount: 0,
+      isUpvoted: false,
+      isSaved: false,
+    };
+
+    return <SbmDetailPage bookmark={bookmark} />;
   }
 
   const taskConfig = getTaskConfig(task);
