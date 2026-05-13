@@ -25,7 +25,7 @@ export function LoginPageOverride() {
     }
     try {
       await login(email, password)
-      router.push('/sbm/collections')
+      router.push('/')
     } catch {
       setError('Login failed. Please try again.')
     }

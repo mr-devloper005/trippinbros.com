@@ -219,10 +219,10 @@ export default function SubmitBookmarkPage() {
                 type="button"
                 className="h-10 rounded-none bg-[#2f2f32] px-5 text-sm font-bold uppercase text-white hover:bg-[#1f1f22]"
                 onClick={() => {
-                  setStatusMessage('Draft saved locally.')
+                  setStatusMessage('Draft saved.')
                   toast({
                     title: 'Draft saved',
-                    description: 'Your bookmark draft is saved on this device.',
+                    description: 'Your bookmark draft is saved.',
                   })
                 }}
               >

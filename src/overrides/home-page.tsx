@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Clock3 } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { SITE_CONFIG } from '@/lib/site-config'
@@ -19,7 +18,7 @@ export async function HomePageOverride() {
   const featured = posts[0]
   const topRow = posts.slice(1, 5)
   const latest = posts.slice(0, 6)
-  const popular = posts.slice(6, 10)
+  const popular = posts.slice(0, 4)
 
   return (
     <div className="min-h-screen bg-[#ededed] text-[#292929]">
@@ -33,10 +32,6 @@ export async function HomePageOverride() {
               <h1 className="mt-4 text-4xl font-extrabold leading-tight text-[#1f1f1f]">
                 {featured?.title || 'Curated resources that save time and improve discovery'}
               </h1>
-              <div className="mt-3 flex items-center gap-2 text-sm text-[#666]">
-                <Clock3 className="h-4 w-4" />
-                <span>{formatDate(featured?.publishedAt || featured?.createdAt)}</span>
-              </div>
             </div>
             <div className="px-6 py-5">
               <p className="text-base leading-8 text-[#444]">
