@@ -1,56 +1,71 @@
-import { Mail, MessageSquareText, ShieldCheck } from 'lucide-react';
+import { Mail, MessageSquare, Phone, Sparkles } from 'lucide-react'
+import { NavbarShell } from '@/components/shared/navbar-shell'
+import { Footer } from '@/components/shared/footer'
+import { SITE_CONFIG } from '@/lib/site-config'
+import { CONTACT_PAGE_OVERRIDE_ENABLED, ContactPageOverride } from '@/overrides/contact-page'
+import { ContactLeadForm } from "@/components/shared/contact-lead-form";
 
-import { ContactLeadForm } from '@/components/shared/contact-lead-form';
-import { Footer } from '@/components/shared/footer';
-import { NavbarShell } from '@/components/shared/navbar-shell';
-
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Trippinbros';
-
-const contactHighlights = [
-  { icon: Mail, title: 'Direct response', copy: 'Your message is saved securely and routed to the right team.' },
-  { icon: MessageSquareText, title: 'Clear details', copy: 'Share your requirement, question, or collaboration idea in one place.' },
-  { icon: ShieldCheck, title: 'Reliable follow-up', copy: 'We keep the request record so every conversation stays traceable.' },
-];
+const supportLanes = [
+  {
+    title: 'General Support',
+    body: 'Questions about using bookmarks, collections, and submitting links.',
+    icon: MessageSquare,
+  },
+  {
+    title: 'Partnerships',
+    body: 'Collaboration requests, curated campaigns, and resource partnerships.',
+    icon: Sparkles,
+  },
+  {
+    title: 'Account Help',
+    body: 'Login issues, profile concerns, and data-related requests.',
+    icon: Mail,
+  },
+]
 
 export default function ContactPage() {
+  if (CONTACT_PAGE_OVERRIDE_ENABLED) {
+    return <ContactPageOverride />
+  }
+
   return (
-    <div className="min-h-screen bg-[#f7f1e8] text-stone-950">
+    <div className="min-h-screen bg-[#ededed] text-[#292929]">
       <NavbarShell />
-      <main>
-        <section className="relative overflow-hidden px-6 py-20 md:px-10 lg:px-16">
-          <div className="absolute left-[-10%] top-10 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl" />
-          <div className="absolute bottom-0 right-[-8%] h-80 w-80 rounded-full bg-stone-300/50 blur-3xl" />
 
-          <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div>
-              <p className="text-sm font-black uppercase tracking-[0.35em] text-stone-500">Contact</p>
-              <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[0.95] tracking-[-0.06em] text-stone-950 md:text-7xl">
-                Let&apos;s talk about your next move.
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-700">
-                Use this form to reach {siteName}. Your request will be recorded and shared with the support team for follow-up.
-              </p>
-
-              <div className="mt-8 grid gap-4">
-                {contactHighlights.map((item) => (
-                  <div key={item.title} className="flex gap-4 rounded-3xl border border-stone-200 bg-white/60 p-5 shadow-sm">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-stone-950 text-white">
-                      <item.icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-base font-black text-stone-950">{item.title}</h2>
-                      <p className="mt-1 text-sm leading-6 text-stone-600">{item.copy}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      <main className="mx-auto max-w-5xl px-4 py-8">
+        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <article className="border border-[#dbdbdb] bg-white p-6">
+            <span className="inline-flex bg-[#2d2d30] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">Contact Us</span>
+            <h1 className="mt-4 text-4xl font-extrabold leading-tight text-[#1f1f1f]">Get in Touch With {SITE_CONFIG.name}</h1>
+            <p className="mt-4 text-base leading-8 text-[#444]">
+              Reach out for support, feedback, or collaboration. We usually respond within one business day.
+            </p>
+            <div className="mt-5 space-y-3 text-sm text-[#444]">
+              <p className="inline-flex items-center gap-2"><Mail className="h-4 w-4" /> support@{SITE_CONFIG.domain}</p>
+              <p className="inline-flex items-center gap-2"><Phone className="h-4 w-4" /> +1 (555) 010-2048</p>
             </div>
+          </article>
 
-            <ContactLeadForm />
-          </div>
+          <aside className="space-y-5">
+            {supportLanes.map((lane) => (
+              <div key={lane.title} className="border border-[#dbdbdb] bg-white p-5">
+                <div className="inline-flex h-8 w-8 items-center justify-center bg-[#f5bc08] text-white">
+                  <lane.icon className="h-4 w-4" />
+                </div>
+                <h2 className="mt-3 text-2xl font-extrabold leading-tight text-[#1f1f1f]">{lane.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-[#4a4a4a]">{lane.body}</p>
+              </div>
+            ))}
+          </aside>
+        </section>
+
+        <section className="mt-8 border border-[#dbdbdb] bg-white p-6">
+          <h2 className="text-3xl font-extrabold leading-tight text-[#1f1f1f]">Send a Message</h2>
+          <ContactLeadForm />
         </section>
       </main>
+
       <Footer />
     </div>
-  );
+  )
 }
