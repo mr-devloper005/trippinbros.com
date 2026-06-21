@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Menu, Search, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/lib/auth-context'
@@ -13,7 +13,6 @@ export const NAVBAR_OVERRIDE_ENABLED = true
 const mainLinks = [
   { label: 'HOME', href: '/' },
   { label: 'BOOKMARKS', href: '/sbm' },
-  { label: 'COLLECTIONS', href: '/sbm/collections' },
   { label: 'SUBMIT LINK', href: '/sbm/submit' },
 ]
 
@@ -26,17 +25,11 @@ const utilityLinks = [
 
 export function NavbarOverride() {
   const [isOpen, setIsOpen] = useState(false)
-  const [todayLabel, setTodayLabel] = useState('')
   const { isAuthenticated, user, logout } = useAuth()
-
-  useEffect(() => {
-    setTodayLabel(new Date().toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))
-  }, [])
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#d5d5d5] bg-[#ededed] text-[#232323]">
       <div className="mx-auto hidden max-w-5xl items-center justify-between px-4 py-2 text-xs md:flex">
-        <span>{todayLabel || 'Today'}</span>
         <div className="flex items-center gap-3">
           {utilityLinks.map((item) => (
             <Link key={item.href} href={item.href} className="hover:text-[#d37800]">
@@ -54,9 +47,6 @@ export function NavbarOverride() {
           {isAuthenticated ? (
             <>
               <span className="text-sm text-[#575757]">Hi, {user?.name || 'User'}</span>
-              <Button asChild size="sm" className="h-9 rounded-none bg-[#2f2f32] px-4 text-white hover:bg-[#1f1f22]">
-                <Link href="/sbm/collections">My Collections</Link>
-              </Button>
               <Button size="sm" variant="outline" className="h-9 rounded-none border-[#2f2f32] px-4 text-[#2f2f32]" onClick={logout}>
                 Logout
               </Button>

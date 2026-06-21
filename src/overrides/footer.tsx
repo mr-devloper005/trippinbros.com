@@ -19,7 +19,6 @@ export function FooterOverride() {
           <h4 className="mb-4 border-l-4 border-[#f6c411] pl-3 text-lg font-bold">Quick Links</h4>
           <ul className="space-y-3 text-sm text-[#dfd9df]">
             <li><Link href="/sbm" className="hover:text-[#f6c411]">Bookmark Feed</Link></li>
-            <li><Link href="/sbm/collections" className="hover:text-[#f6c411]">Collections</Link></li>
             <li><Link href="/sbm/submit" className="hover:text-[#f6c411]">Submit Link</Link></li>
             <li><Link href="/login" className="hover:text-[#f6c411]">Member Login</Link></li>
           </ul>

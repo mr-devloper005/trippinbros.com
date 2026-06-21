@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Clock3, FolderOpen, Link2, TrendingUp } from 'lucide-react'
+import { FolderOpen, Link2, TrendingUp } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { buildTaskMetadata } from '@/lib/seo'
@@ -15,13 +15,6 @@ export const generateMetadata = (): Metadata =>
     title: taskPageMetadata.sbm.title,
     description: taskPageMetadata.sbm.description,
   })
-
-function formatDate(value?: string | null) {
-  if (!value) return 'Recent'
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Recent'
-  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-}
 
 export default async function SocialBookmarkingPage({ searchParams }: { searchParams?: { category?: string } }) {
   const posts = await fetchTaskPosts('sbm', 24, { allowMockFallback: true, fresh: true })
@@ -55,10 +48,6 @@ export default async function SocialBookmarkingPage({ searchParams }: { searchPa
               <h1 className="mt-4 text-4xl font-extrabold leading-tight text-[#1f1f1f]">
                 {featured?.title || 'Curated resources for smarter daily work'}
               </h1>
-              <div className="mt-3 flex items-center gap-2 text-sm text-[#666]">
-                <Clock3 className="h-4 w-4" />
-                <span>{formatDate(featured?.publishedAt || featured?.createdAt)}</span>
-              </div>
             </div>
             <div className="px-6 py-5">
               <p className="text-base leading-8 text-[#444]">
@@ -109,7 +98,6 @@ export default async function SocialBookmarkingPage({ searchParams }: { searchPa
               <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-wide text-[#777]">
                 <span className="inline-flex items-center gap-1"><TrendingUp className="h-3.5 w-3.5" /> Resource #{index + 1}</span>
                 <span className="inline-flex items-center gap-1"><FolderOpen className="h-3.5 w-3.5" /> {(post.content as Record<string, unknown> | undefined)?.category || 'General'}</span>
-                <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> {formatDate(post.publishedAt || post.createdAt)}</span>
               </div>
               <h3 className="mt-3 text-2xl font-extrabold leading-tight text-[#1f1f1f]">{post.title}</h3>
               <p className="mt-3 text-sm leading-7 text-[#4a4a4a]">{post.summary || 'Open this bookmark for a clear breakdown and quick access to the original source.'}</p>

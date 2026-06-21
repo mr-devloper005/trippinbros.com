@@ -26,7 +26,7 @@ export function RegisterPageOverride() {
     }
     try {
       await signup(name, email, password)
-      router.push('/sbm/collections')
+      router.push('/')
     } catch {
       setError('Registration failed. Please try again.')
     }
